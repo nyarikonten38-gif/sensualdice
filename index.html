@@ -3,20 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dadu Sentuhan - Game Pasutri</title>
+    <title>Dadu Sentuhan Sensual 3D - Pasutri</title>
     <style>
         :root {
-            --primary: #ff4d6d;
-            --primary-dark: #c9184a;
-            --bg-dark: #0f0e17;
-            --card-bg: #1f1e2e;
-            --accent: #ffb703;
-            --text: #fffffe;
+            --primary: #ff2a5f;
+            --primary-glow: rgba(255, 42, 95, 0.4);
+            --secondary: #7b2cbf;
+            --bg-dark: #09070f;
+            --card-bg: rgba(23, 18, 38, 0.7);
+            --accent: #ffd166;
+            --text: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(123, 44, 191, 0.25) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(255, 42, 95, 0.2) 0%, transparent 40%);
             color: var(--text);
             display: flex;
             justify-content: center;
@@ -24,101 +33,385 @@
             min-height: 100vh;
             margin: 0;
             padding: 15px;
-            box-sizing: border-box;
         }
 
         .container {
-            background-color: var(--card-bg);
-            border: 1px solid rgba(255, 77, 109, 0.3);
-            border-radius: 20px;
-            padding: 25px;
-            max-width: 480px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 25px 20px;
+            max-width: 450px;
             width: 100%;
             text-align: center;
-            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 42, 95, 0.15);
         }
 
         h1 {
-            color: var(--primary);
+            color: var(--text);
+            font-size: 1.6rem;
+            letter-spacing: 2px;
             margin: 0 0 5px 0;
-            font-size: 1.8rem;
-            letter-spacing: 1px;
             text-transform: uppercase;
+            text-shadow: 0 0 10px var(--primary-glow);
         }
 
         .subtitle {
-            font-size: 0.85rem;
-            color: #a7a9be;
+            font-size: 0.8rem;
+            color: #a0a0c0;
             margin-bottom: 20px;
         }
 
-        /* Container Dadu Visual */
-        .dice-area {
+        /* Indicator Giliran */
+        .turn-badge {
+            display: inline-block;
+            background: rgba(255, 42, 95, 0.15);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        /* Area 3D Dice Stage */
+        .dice-stage {
             display: flex;
             justify-content: space-around;
-            margin: 25px 0;
-            gap: 15px;
+            align-items: center;
+            height: 140px;
+            perspective: 600px;
+            margin: 10px 0 20px 0;
         }
 
-        .dice-box {
-            flex: 1;
-            background: #15141e;
-            border: 2px solid rgba(255, 77, 109, 0.4);
+        .scene {
+            width: 90px;
+            height: 90px;
+            perspective: 400px;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .cube__face {
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 16px;
-            padding: 20px 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 110px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-            transition: transform 0.1s ease;
-        }
-
-        .dice-box.shake {
-            animation: shake 0.5s ease-in-out infinite;
-        }
-
-        @keyframes shake {
-            0% { transform: rotate(0deg) scale(1); }
-            20% { transform: rotate(-8deg) scale(1.05); }
-            40% { transform: rotate(8deg) scale(1.05); }
-            60% { transform: rotate(-8deg) scale(1.05); }
-            80% { transform: rotate(8deg) scale(1.05); }
-            100% { transform: rotate(0deg) scale(1); }
-        }
-
-        .dice-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: #a7a9be;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-
-        .dice-value {
-            font-size: 1.3rem;
+            font-size: 0.85rem;
             font-weight: bold;
-            color: var(--accent);
-            min-height: 35px;
             display: flex;
-            align-items: center;
-        }
-
-        /* Tampilan Hasil Instruksi */
-        .instruction-card {
-            background: #15141e;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            min-height: 80px;
-            display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 6px;
+            box-sizing: border-box;
+            text-align: center;
+            color: #fff;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
         }
 
-        .instruction-title {
+        /* Warna Dadu 1 (Aksi) */
+        .cube-action .cube__face {
+            background: rgba(255, 42, 95, 0.35);
+            border-color: rgba(255, 42, 95, 0.6);
+        }
+        /* Warna Dadu 2 (Area) */
+        .cube-body .cube__face {
+            background: rgba(123, 44, 191, 0.4);
+            border-color: rgba(123, 44, 191, 0.6);
+        }
+
+        /* Orientasi 6 Sisi Kubus 3D */
+        .cube__face--1 { transform: rotateY(  0deg) translateZ(45px); }
+        .cube__face--2 { transform: rotateY(90deg) translateZ(45px); }
+        .cube__face--3 { transform: rotateY(180deg) translateZ(45px); }
+        .cube__face--4 { transform: rotateY(-90deg) translateZ(45px); }
+        .cube__face--5 { transform: rotateX( 90deg) translateZ(45px); }
+        .cube__face--6 { transform: rotateX(-90deg) translateZ(45px); }
+
+        /* Tampilan Instruksi */
+        .instruction-card {
+            background: rgba(10, 8, 20, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 20px;
+            min-height: 85px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .instruction-card label {
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .instruction-card div {
+            font-size: 1.05rem;
+            line-height: 1.4;
+        }
+
+        /* Pengaturan Durasi */
+        .timer-options {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .time-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #a0a0c0;
+            padding: 6px 12px;
+            border-radius: 20px;
             font-size: 0.8rem;
-            color: var
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .time-btn.active {
+            background: var(--secondary);
+            color: #fff;
+            border-color: var(--secondary);
+            box-shadow: 0 0 10px rgba(123, 44, 191, 0.4);
+        }
+
+        /* Tombol & Timer Display */
+        .btn-roll {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s ease;
+            box-shadow: 0 8px 25px var(--primary-glow);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-roll:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px var(--primary-glow);
+        }
+
+        .btn-roll:active { transform: translateY(1px); }
+
+        .timer-display {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #a0a0c0;
+            display: none;
+        }
+
+        .timer-display span {
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Sensual Dice 3D</h1>
+    <div class="subtitle">Game Eksplorasi Intim Pasangan</div>
+
+    <!-- Turn Indicator -->
+    <div class="turn-badge" id="turnBadge">Giliran: Pemain 1</div>
+
+    <!-- 3D Dice Stage -->
+    <div class="dice-stage">
+        <!-- Dadu 1: Aksi -->
+        <div class="scene">
+            <div class="cube cube-action" id="cubeAction">
+                <div class="cube__face cube__face--1">Cium</div>
+                <div class="cube__face cube__face--2">Belai</div>
+                <div class="cube__face cube__face--3">Gigit</div>
+                <div class="cube__face cube__face--4">Tiup</div>
+                <div class="cube__face cube__face--5">Jilat</div>
+                <div class="cube__face cube__face--6">Pijat</div>
+            </div>
+        </div>
+
+        <!-- Dadu 2: Area Tubuh -->
+        <div class="scene">
+            <div class="cube cube-body" id="cubeBody">
+                <div class="cube__face cube__face--1">Bibir</div>
+                <div class="cube__face cube__face--2">Leher</div>
+                <div class="cube__face cube__face--3">Telinga</div>
+                <div class="cube__face cube__face--4">Dada</div>
+                <div class="cube__face cube__face--5">Paha</div>
+                <div class="cube__face cube__face--6">Sensitif</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions -->
+    <div class="instruction-card">
+        <label>Tantangan Sentuhan</label>
+        <div id="instructionText">Tekan tombol di bawah untuk mengocok dadu 3D...</div>
+    </div>
+
+    <!-- Timer Setting -->
+    <div class="timer-options">
+        <button class="time-btn" onclick="setTimer(30, this)">30 Detik</button>
+        <button class="time-btn active" onclick="setTimer(60, this)">60 Detik</button>
+        <button class="time-btn" onclick="setTimer(90, this)">90 Detik</button>
+    </div>
+
+    <!-- Roll Button -->
+    <button class="btn-roll" id="rollBtn" onclick="rollDice()">Kocok Dadu 🎲</button>
+
+    <!-- Timer Display -->
+    <div class="timer-display" id="timerDisplay">
+        Sisa Waktu: <span id="timerCount">60</span> dtk
+    </div>
+</div>
+
+<script>
+    // Audio Synthesizer untuk efek suara Kocok Dadu
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function playDiceSound() {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        for (let i = 0; i < 6; i++) {
+            setTimeout(() => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(150 + Math.random() * 100, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.04);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.04);
+            }, i * 70);
+        }
+    }
+
+    // Data Aksi & Area
+    const actions = [
+        { name: "Cium", detail: "Cium secara lembut dan mesra" },
+        { name: "Belai", detail: "Belaikan jemarimu secara halus" },
+        { name: "Gigit", detail: "Berikan gigitan-gigitan kecil yang manja" },
+        { name: "Tiup", detail: "Tiupkan napas hangatmu" },
+        { name: "Jilat", detail: "Gunakan ujung lidahmu untuk menelusuri" },
+        { name: "Pijat", detail: "Pijat lembut dengan irama santai" }
+    ];
+
+    const bodyParts = [
+        { name: "Bibir", detail: "area Bibir & Leher Atas" },
+        { name: "Leher", detail: "area Leher & Jenjang Bahu" },
+        { name: "Telinga", detail: "area Daun Telinga" },
+        { name: "Dada", detail: "area Dada / Sensitif Atas" },
+        { name: "Paha", detail: "area Paha Bagian Dalam" },
+        { name: "Sensitif", detail: "area Sensitif Pilihan Pasangan" }
+    ];
+
+    // Rotasi 3D CSS untuk setiap sisi kubus (1-6)
+    const rotations = [
+        { x: 0, y: 0 },         // Side 1
+        { x: 0, y: -90 },       // Side 2
+        { x: 0, y: -180 },      // Side 3
+        { x: 0, y: 90 },        // Side 4
+        { x: -90, y: 0 },       // Side 5
+        { x: 90, y: 0 }         // Side 6
+    ];
+
+    let selectedTimer = 60;
+    let timerInterval;
+    let playerTurn = 1;
+
+    function setTimer(seconds, element) {
+        selectedTimer = seconds;
+        document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
+        element.classList.add('active');
+    }
+
+    function rollDice() {
+        const cubeAction = document.getElementById('cubeAction');
+        const cubeBody = document.getElementById('cubeBody');
+        const rollBtn = document.getElementById('rollBtn');
+        const timerDisplay = document.getElementById('timerDisplay');
+        
+        clearInterval(timerInterval);
+        timerDisplay.style.display = 'none';
+
+        playDiceSound();
+        rollBtn.disabled = true;
+
+        // Pilih angka acak 0-5
+        const randActionIndex = Math.floor(Math.random() * 6);
+        const randBodyIndex = Math.floor(Math.random() * 6);
+
+        // Tambahkan putaran ekstra (360 * 3) agar animasi berputar dramatis
+        const extraRotX = 360 * 3;
+        const extraRotY = 360 * 3;
+
+        const actionRot = rotations[randActionIndex];
+        const bodyRot = rotations[randBodyIndex];
+
+        cubeAction.style.transform = `rotateX(${actionRot.x + extraRotX}deg) rotateY(${actionRot.y + extraRotY}deg)`;
+        cubeBody.style.transform = `rotateX(${bodyRot.x + extraRotX}deg) rotateY(${bodyRot.y + extraRotY}deg)`;
+
+        // Setelah animasi selesai (1.2 detik)
+        setTimeout(() => {
+            rollBtn.disabled = false;
+            
+            const actionResult = actions[randActionIndex];
+            const bodyResult = bodyParts[randBodyIndex];
+
+            document.getElementById('instructionText').innerHTML = 
+                `<strong>${actionResult.detail}</strong> di <strong>${bodyResult.detail}</strong>!`;
+
+            // Ganti giliran pemain
+            playerTurn = playerTurn === 1 ? 2 : 1;
+            document.getElementById('turnBadge').innerText = `Giliran: Pemain ${playerTurn}`;
+
+            // Jalankan Timer
+            startTimer(selectedTimer);
+        }, 1200);
+    }
+
+    function startTimer(seconds) {
+        const timerDisplay = document.getElementById('timerDisplay');
+        const timerCount = document.getElementById('timerCount');
+        
+        timerDisplay.style.display = 'block';
+        let timeLeft = seconds;
+        timerCount.innerText = timeLeft;
+
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            timerCount.innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerCount.innerText = "Selesai! Ganti Giliran ⏱️";
+            }
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
